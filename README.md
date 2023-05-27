@@ -1,16 +1,9 @@
 # PracticaSpark
 
+FALTA
+-limpiar el codigo de prints
 
-FORMATO
-#titulo ##subtitutol ###subsubtitulo
-''' codigo''' '''ruby codigo resaltado
-> para gris
-
-
-1.Definición clara y precisa del problema a resolver.
-
-
-
+1. Definición clara y precisa del problema a resolver.
 2. Diseño y la implementación en Spark de la solución al problema propuesto y explicaciones de funciones
 3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
 
@@ -110,7 +103,7 @@ def agruparZona(sc,filename,n):
 #### getTpla2()
 Dado un diccionario que contiene la información de un solo viaje, extraemos solo el id de las estaciones de origen y destino, y el tiempo de viaje.
 
- <sub> No confundir con la función getTpla, que pasa la informacion de una estacion (del archivo infile2) mientras que getTpla2 recibe la información de cada viaje (del archivo infile) </sub> 
+ <sub> No confundir con la función getTpla, que pasa la informacion de una estacion (del archivo infile2) mientras que getTpla2 recibe la información de cada viaje (del archivo infile1) </sub> 
 
 ```ruby
 def getTpla2(x):
@@ -121,7 +114,7 @@ def getTpla2(x):
 ```
 
 #### elegir_preferido()
-Según la lista de candidatos, el porcentaje a cubrir y la opción dada, selecciona los mejores candidatos. 
+Según la lista de candidatos ordenada de mayor a menor viajes por zona, el porcentaje a cubrir y la opción dada, selecciona los mejores candidatos. 
 Devuelve el total de viajes en la zona elegida y una lista que contiene las zonas preferidas y los viajes correspondientes.
 
 ```ruby
@@ -145,7 +138,9 @@ def elegir_preferido(lista, perc, opcion):
     return total, L
 ```
 #### cambiar_de_id_zona()
-Dado el id de una ... y un diccionario que contiene por cada zona las estaciones que pertenecen a él (obtenido con la función )
+
+Dado la tupla obtenida de un viaje y un diccionario que contiene por cada zona las estaciones que pertenecen a él (obtenido con la función *agruparZona()* ) devuelve la zona a la que pertenece la estación destino. 
+También devuelve un 1, esto es una cuestión de formato, para facilitar el próximo uso de *groupByKey*
 
 ```ruby
 def cambiar_de_id_zona(ida, dict_lista_zonas):
@@ -154,46 +149,61 @@ def cambiar_de_id_zona(ida, dict_lista_zonas):
         return (key,1)
 ```
 
-----------------------------------------------
-Nuestra idea es dado dos ficheros del mismo mes, uno con la información de los movimientos de todo el mes (id de estación inicio, id de estación destino y tiempo de recorrido), y otro con la información de la situacion de cada estación (este contiene la ubicación de cada estación)
+#### funcion principal()
+Crea a partir del archivo infile1 un rdd; seleccionamos las columnas deseadas con la funcion *getTpla2* y filtramos aquellos viajes que se encuentren el intervalo de tiempo que queramos. 
+De todos viajes, elegimos solo los que partan de estaciones que se encuentren en la zona a estudiar, y agrupamos según la zona de la estación de destino. 
+Cambiamos el formato de los datos para poder ordenarlos según el número de viajes en cada zona. Aplicamos la funcion *elegir_preferido* para obtener las zonas preferidas y viajes correspondientes.
+Por último escribimos en un fichero de salida los resultados obtenidos.
 
-0.Agrupar zonas según id
-def agruparZona(sc, infile2):
-    rdd_base = sc.textFile(infile2)
-    estaciones = rdd_base.map(lambda x: json.loads(x)).take(1) 
-    estaciones = estaciones['estaciones'] [{..., long:40 lat:40  id:1}]
-    
-    
-1. Elegir de cada movimiento solo los datos que necesitamos
-
-def getTpla(x):
-  tpla = (x['idunplug_station'],
-           x['idplug_station'],
-           x['travel_time'])
-  return tpla
-  
-2.
-
-def cambiar_de_id_zona(id, dict_lista_zonas):
-    for key, value in dict_lista_zonas:
-      if id in value:
-        return key
-
-def F(sc, zona_a_analizar, lista_zonas, infile1, ofile):
+```ruby
+def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     rdd_base = sc.textFile(infile1)
     bicis = rdd_base.map(lambda x: json.loads(x))
-    movimientos = bicis.map(getTpla)\
-                  .filter(segun el 3 argumento, acotar respecto a ciertos segundos)  [ (idi,idf,t)]
-    id_zona= lista_zonas[zona_a_analizar]
-    rdd= movimientos.filter(lambda x: idi in id_zona)\  [(id,idf,t)] que nos interesan
-                    .map(lambda x: cambiar_de_id_zona(x[1],lista_zonas)) [zonaf, zonaf, zonaf]
-                    .groupByKey (si existe) {zonaf: cont, ...}
-    #tomamos el maximo, el porcentaje ,...               
-    
-   
-    
+    movimientos = bicis.map(getTpla2)\
+                  .filter(lambda x: x[2] >= 700 and x[2]<=1000 ) 
+    id_zona= lista_zonas[zona_a_analizar]  
+    rdd= movimientos.filter(lambda x: x[0] in id_zona)\
+                    .map(lambda x: cambiar_de_id_zona(x,lista_zonas))\
+                    .groupByKey()\
+                    .mapValues(lambda x: len(x))\
+                    .map(lambda x: (x[1],x[0]))\
+                    .sortByKey(False)
+    total, L=elegir_preferido(rdd.collect(), perc ,opcion)
+
     outf = open(outfile, "w")
-    for line in to_print:
-        outf.write(line + '\n')
+    outf.write(f'El total de movimientos es {total} que salen de la zona {zona_a_analizar} \n')
+    if opcion==1:
+      outf.write(f'Las zonas preferidas con porcentaje mayor que {perc} son: \n')
+    else:
+      outf.write(f'Las zonas que suman al menos un porcentaje mayor que {perc} son: \n')
+    for line in L:
+        outf.write(str(line) + '\n')
+    
     outf.close()
+```
+
+#### funcion a ejecutar 
+Primero creamos la cuadricula de zonas y asignamos a cada estación a una zona con la función *agruparZona* y se la pasamos como argumento a la funcion principal F.
+
+Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos.
+
+```ruby
+def main(infile1, infile2, outfile, zonaSetUp, zona, perc, opcion):
+    sc=SparkContext()
+    b= agruparZona(sc,infile2,zonaSetUp)
+    F(sc,zona, b, infile1,outfile,perc, opcion)
+
+if __name__ == '__main__':
+    if len(sys.argv) != 8:
+        print("Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
+    else:
+        p=float(sys.argv[6])
+        if p>1:
+            p=p/100.
+        main(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]),p,int(sys.argv[7]))
+```
+
+
+
+
     
