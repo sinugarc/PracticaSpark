@@ -1,10 +1,12 @@
 # PracticaSpark
 
 FALTA:
--AgruparZona: cuadricula
--usar hadoop(?)
--Decidir como añalizar: maximo,porcentaje
--Probar en python
+-Poner el sparkContext bien
+
+FORMATO
+#titulo ##subtitutol ###subsubtitulo
+''' codigo''' '''ruby codigo resaltado
+> para gris
 
 Nuestra idea es dado dos ficheros del mismo mes, uno con la información de los movimientos de todo el mes (id de estación inicio, id de estación destino y tiempo de recorrido), y otro con la información de la situacion de cada estación (este contiene la ubicación de cada estación)
 
