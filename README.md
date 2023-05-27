@@ -1,55 +1,58 @@
-# PracticaSpark
+# Practica Spark
+<sub> Sinhue García Gil,  Cristina Hernando Esperanza,  Daniel Martínez Martín </sub>
 
 FALTA
--limpiar el codigo de prints
+- [ ] limpiar el codigo de prints
 
-1. Definición clara y precisa del problema a resolver.
-2. Diseño y la implementación en Spark de la solución al problema propuesto y explicaciones de funciones
-3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
+- [x] 1. Definición clara y precisa del problema a resolver.
+- [x] 2. Diseño y la implementación en Spark de la solución al problema propuesto y explicaciones de funciones
+- [ ] 3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
 
 
-## Definicion del problema a resolver
+## Definición del problema a resolver
 El problema que nos planteamos es analizar el destino preferido de una región de Madrid.
-Dado una zona a estudiar, mediante el uso de los archivos de la base de datos de BICIMad, un porcentaje y un intervalo de tiempo de uso constante; queremos que nos devuelva una o varias zonas que corresponden al destino preferido.
-Consideramos como destino preferido a dichas zonas que cumplan una de las dos siguientes propiedades según la opción dada como argumento:
--Opcion 0: Las zonas tienen que cubrir, entre todas, el porcentaje dado.
--Opcion 1: Las zonas tiene que superar, cada una, el porcentaje dado.
 
-> ### Ejemplo 
+Dado una zona a estudiar, mediante el uso de los archivos de la base de datos de BICIMad, un porcentaje y un intervalo de tiempo de uso constante; queremos que nos devuelva una o varias zonas que corresponden al destino preferido.
+
+Consideramos como destino preferido a dichas zonas que cumplan una de las dos siguientes propiedades según la opción dada como argumento:
+
+* Opción 0:   Las zonas tienen que cubrir, entre todas, el porcentaje dado.
+
+* Opción 1:   Las zonas tiene que superar, cada una, el porcentaje dado.
+
+
+> ### Ejemplo
 > 
-> Dada la zona 0 de origen, el total de viajes que salen de 0 son 100
+> Dada la zona A de origen, el total de viajes que salen de A son 100
 >
 >
 > | Zonas     | 1  |  2 | 3  |  4 |
 > | ----------| ---|----|----|----|
 > | Nº Viajes | 40 | 30 | 20 | 10 |
 >
-> Dada la opcion 0 y el porcentaje 20, solo nos devolveria la zona 1.
-> Dada la opcion 0 y el porcentaje 50, nos devolveria la zona 1 y 2.
-> Dada la opcion 1 y el porcentaje 20, devolveria la zona 1, 2 y 3. 
-> Dada la opcion 1 y el porcentaje 50, no nos devolvería ninguna zona.
-
-
-
-| Zonas         |       1       |       2       | Second Header | Third Header  |
-| ------------- | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-
-
+> Dada la opción 0 y el porcentaje 20, solo nos devolvería la zona 1.
+> 
+> Dada la opción 0 y el porcentaje 50, nos devolvería la zona 1 y 2.
+> 
+> Dada la opción 1 y el porcentaje 20, devolvería la zona 1, 2 y 3. 
+> 
+> Dada la opción 1 y el porcentaje 50, no nos devolvería ninguna zona.
 
 
 
 ## Diseño e implementación en Spark 
-Para poder clasificar las estaciones en distintas zonas, necesitamos el archivo infile2 202007.json (o su equivalente de otro año) ya que este contiene para cada estación, identificada con un número del 1 al 220, sus coordenadas geoestacionarias. 
-Además necesitamos para cada estación de origen que pertenezca a la zona dada a estudiar, sus estaciones de destino. Esta información viene dada en otro archivo distinto infile1 202007_movements.json (o su equivalente de otro año). 
 
-Vamos a definir una zona en este contexto como una celda de la cuadricula generada por todas las estaciones y un número dado, n (generalmente 5). Generamos esta cuadricula tomando la longitud y latitud, máxima y mínima del total de estaciones y las tomamos como esquinas. Generamos intervalos equiespaciados tal que divida esta cuadricula en n x n, generando n^2 celdas. 
+Para poder clasificar las estaciones en distintas zonas, necesitamos el archivo infile2 *"202007.json"* (o su equivalente de otro año) ya que este contiene para cada estación, identificada con un número del 1 al 220, sus coordenadas geográficas. 
+
+Además necesitamos para cada estación de origen que pertenezca a la zona dada a estudiar, sus estaciones de destino. Esta información viene dada en otro archivo distinto infile1 *"202007_movements.json"* (o su equivalente de otro año). 
+
+Vamos a definir una zona en este contexto como una celda de la cuadrícula generada por todas las estaciones y un número dado, n (usualmente 5). Generamos esta cuadrícula tomando la longitud y latitud, máxima y mínima del total de estaciones y las tomamos como esquinas. Se crean intervalos equiespaciados tal que dividan esta cuadrícula en $n$ x $n$,  produciendo $n^2$ celdas. 
 
 ### Funciones
 
 #### getTpla()
-Dado un diccionario que contiene la información de una sola estación, extraemos solo el id, nombre y coordenadas.
+
+Dado un diccionario que contiene la información de una sola estación, extraemos sólo el id, nombre y coordenadas.
 ```ruby
 def getTpla(x):
   tpla = (x['id'],
@@ -60,7 +63,8 @@ def getTpla(x):
 ```
 
 #### identifyZone()
-Dada la tupla extraida previamente y unas constantes de longitud y latitud (máximo, mínimo y la longitud de la celda), devuelve la zona a la que pertenece dicha estación con su identificación.
+
+Dada la tupla extraída previamente y unas constantes de longitud y latitud (máximo, mínimo y las longitudes de la celda), devuelve la zona a la que pertenece dicha estación con su identificación.
 
 ```ruby
 def identifyZone(x,n,min_lat,cte_lat,min_long,cte_long):
@@ -72,9 +76,9 @@ def identifyZone(x,n,min_lat,cte_lat,min_long,cte_long):
 
 #### agruparZona()
 
-Dado el fichero de entrada infile2, extraemos de su primera linea (todas son equivalentes para lo que nos interesa), la lista de diccionarios que contiene la información de cada estación. Aplicamos a cada estación la función *getTpla()* y con los valores calculados de latitud y longitud aplicamos la función *identifyZone()*.
+Dado el fichero de entrada infile2, extraemos de su primera línea (todas son equivalentes para las columnas que nos interesan), la lista de diccionarios que contiene la información de cada estación. Aplicamos a cada estación la función *getTpla()* y con los valores calculados de latitud y longitud aplicamos la función *identifyZone()*.
 
-Agrupamos por zonas las estaciones y devolvemos el conjunto de datos como diccionario.
+Agrupamos por zonas las estaciones y devolvemos el conjunto de datos como un diccionario.
 
 ```ruby
 def agruparZona(sc,filename,n):
@@ -101,7 +105,8 @@ def agruparZona(sc,filename,n):
 ```
 
 #### getTpla2()
-Dado un diccionario que contiene la información de un solo viaje, extraemos solo el id de las estaciones de origen y destino, y el tiempo de viaje.
+
+Dado un diccionario que contiene la información de un solo viaje, extraemos sólo el id de las estaciones de origen y destino, y el tiempo de viaje.
 
  <sub> No confundir con la función getTpla, que pasa la informacion de una estacion (del archivo infile2) mientras que getTpla2 recibe la información de cada viaje (del archivo infile1) </sub> 
 
@@ -114,8 +119,9 @@ def getTpla2(x):
 ```
 
 #### elegir_preferido()
-Según la lista de candidatos ordenada de mayor a menor viajes por zona, el porcentaje a cubrir y la opción dada, selecciona los mejores candidatos. 
-Devuelve el total de viajes en la zona elegida y una lista que contiene las zonas preferidas y los viajes correspondientes.
+
+Según la lista de candidatos, ordenada de mayor a menor según los viajes por zona, el porcentaje a cubrir y la opción dada; selecciona los mejores candidatos. 
+Devuelve el total de viajes que salen de la zona elegida y una lista que contiene las zonas preferidas y sus correspendientes viajes.
 
 ```ruby
 def elegir_preferido(lista, perc, opcion):
@@ -139,8 +145,8 @@ def elegir_preferido(lista, perc, opcion):
 ```
 #### cambiar_de_id_zona()
 
-Dado la tupla obtenida de un viaje y un diccionario que contiene por cada zona las estaciones que pertenecen a él (obtenido con la función *agruparZona()* ) devuelve la zona a la que pertenece la estación destino. 
-También devuelve un 1, esto es una cuestión de formato, para facilitar el próximo uso de *groupByKey*
+Dado la tupla obtenida de un viaje y un diccionario que contiene por cada zona las estaciones que pertenecen a él (obtenido con la función *agruparZona()* ) devuelve la zona a la que pertenece la estación de destino. 
+También devuelve un 1 para facilitar el próximo uso de *groupByKey* .
 
 ```ruby
 def cambiar_de_id_zona(ida, dict_lista_zonas):
@@ -149,10 +155,11 @@ def cambiar_de_id_zona(ida, dict_lista_zonas):
         return (key,1)
 ```
 
-#### funcion principal()
-Crea a partir del archivo infile1 un rdd; seleccionamos las columnas deseadas con la funcion *getTpla2* y filtramos aquellos viajes que se encuentren el intervalo de tiempo que queramos. 
-De todos viajes, elegimos solo los que partan de estaciones que se encuentren en la zona a estudiar, y agrupamos según la zona de la estación de destino. 
-Cambiamos el formato de los datos para poder ordenarlos según el número de viajes en cada zona. Aplicamos la funcion *elegir_preferido* para obtener las zonas preferidas y viajes correspondientes.
+#### función principal()
+
+Crea a partir del archivo infile1 un rdd; seleccionamos las columnas deseadas con la función *getTpla2* y filtramos aquellos viajes que se encuentren el intervalo de tiempo que queramos. 
+De todos los viajes, elegimos sólo los que partan de estaciones que se encuentren en la zona a estudiar, y agrupamos según la zona de la estación de destino. 
+Cambiamos el formato de los datos para poder ordenarlos según el número de viajes de cada zona. Aplicamos la función *elegir_preferido* para obtener las zonas preferidas y viajes correspondientes.
 Por último escribimos en un fichero de salida los resultados obtenidos.
 
 ```ruby
@@ -182,10 +189,11 @@ def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     outf.close()
 ```
 
-#### funcion a ejecutar 
-Primero creamos la cuadricula de zonas y asignamos a cada estación a una zona con la función *agruparZona* y se la pasamos como argumento a la funcion principal F.
+#### función a ejecutar 
 
-Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos.
+Primero creamos la cuadrícula de zonas y asignamos a cada estación a una zona con la función *agruparZona* y se la pasamos como argumento a la función principal F.
+
+Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, el número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos.
 
 ```ruby
 def main(infile1, infile2, outfile, zonaSetUp, zona, perc, opcion):
@@ -204,6 +212,9 @@ if __name__ == '__main__':
 ```
 
 
+## Explicación de los resultados y conclusión, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados.
 
+
+Sinhue??? 
 
     
