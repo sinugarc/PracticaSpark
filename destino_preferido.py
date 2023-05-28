@@ -70,7 +70,7 @@ def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     rdd_base = sc.textFile(infile1)
     bicis = rdd_base.map(lambda x: json.loads(x))
     movimientos = bicis.map(getTpla2)\
-                       .filter(lambda x: x[2] >= 700 and x[2]<=1000 )
+                       .filter(lambda x: x[2] >= 180 and x[2]<=7200 )
                   
     id_zona= lista_zonas[zona_a_analizar]  
     
