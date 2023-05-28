@@ -88,18 +88,16 @@ Agrupamos por zonas las estaciones y devolvemos el conjunto de datos como un dic
 
 ```ruby
 def agruparZona(sc,filename,n):
-    sc.setLogLevel("ERROR")
     data = sc.textFile(filename)
     mov = data.map(lambda x: json.loads(x)).take(1)[0]["stations"] 
     datos=sc.parallelize(mov)
     estaciones = datos.map(getTpla)
     
-    est=estaciones.collect() #len(estaciones) <230
     
-    max_long=max(est,key=(lambda x: x[3]))[3]
-    min_long=min(est,key=(lambda x: x[3]))[3]
-    max_lat=max(est,key=(lambda x: x[2]))[2]
-    min_lat=min(est,key=(lambda x: x[2]))[2]
+    max_long=max(estaciones,key=(lambda x: x[3]))[3]
+    min_long=min(estaciones,key=(lambda x: x[3]))[3]
+    max_lat=max(estaciones,key=(lambda x: x[2]))[2]
+    min_lat=min(estaciones,key=(lambda x: x[2]))[2]
     
     cte_long=(max_long-min_long)/float(n)
     cte_lat=(max_lat-min_lat)/float(n)
@@ -199,15 +197,19 @@ def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
 
 Primero creamos la cuadrícula de zonas y asignamos a cada estación a una zona con la función *agruparZona* y se la pasamos como argumento a la función principal F.
 
-Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, el número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos.
+Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, el número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos. 
+
+Existen dos archivos ejecutables, destino_preferido.py y destino_preferido.ipynb; que se ejecutan desde la terminal y desde Google Colab respectivamente.
+El .py necesita los argumentos como se muestran posteriormente y por otra parte desde el Google Colab hay que subir los archivos .json y cambiar desde el código los argumentos si fuera necesario.
 
 ```ruby
 def main(infile1, infile2, outfile, zonaSetUp, zona, perc, opcion):
     sc=SparkContext()
+    sc.setLogLevel("ERROR")
     b= agruparZona(sc,infile2,zonaSetUp)
     F(sc,zona, b, infile1,outfile,perc, opcion)
 
-if __name__ == '__main__':
+if __name__ == '__main__': #Para el .py
     if len(sys.argv) != 8:
         print("Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
     else:
@@ -215,12 +217,24 @@ if __name__ == '__main__':
         if p>1:
             p=p/100.
         main(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]),p,int(sys.argv[7]))
+        
+ if __name__ == '__main__': #Para el .ipynb
+     main('202007_movements.json', '202007.json', 'prueba.txt', 5, 6, 0.30, 1)
 ```
 
 
-## Explicación de los resultados y conclusión, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados.
+## Explicación de los resultados y conclusión
+
+Aunque el programa está pensado para tratar los archivos de distintos años, nosotros hemos utilizado como ejemplo principal el mes de julio de 2020, que se resume en los archivos de nombre *"202007.json"* y *"202007_movements.json"* descargardos desde la base de datos de BICIMAD: "link".
+Como referencia, hemos usado una cuadrícula de 5x5 (n=5 ó zonaSetUp) y como zona de estudio la 6. 
+El intervalo de tiempo que deben cumplir los viajes estudiados es (700, 1000), que al estar medidos en segundos, indican que el viaje sea suficientemente largo como para que no se considere una averia de la bici (según la base de datos habia muchos viajes de pocos segundos que tenian el id de estación de inicio igual que el de salida; esto lo hemos interpretado como que existe una avería o algún problema con una bici, por ello descartamos estos viajes). También acortamos superiormente el tiempo de cada viaje para excluir viajes demasiado largos (que podrían ocurrir como otro tipo de avería de bici ó pérdida o robo de ella)
+
+.py y el .ipynb
+
+-motivación, ejemplos,  detalles importantes de la implementación
 
 
-Sinhue??? 
+-Introducir un numero de zona en lugar de coordenadas
+-Ejemplos
 
     
