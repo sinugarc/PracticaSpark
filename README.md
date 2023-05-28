@@ -232,7 +232,7 @@ Aunque el programa está pensado para tratar los archivos de distintos años, no
 
 Como referencia, hemos usado una cuadrícula de 5x5 (n=5 ó zonaSetUp) y como zona de estudio la 6. 
 
-El intervalo de tiempo que deben cumplir los viajes estudiados es (700, 1000), que al estar medidos en segundos, indican que el viaje sea suficientemente largo como para que no se considere una averia de la bici (según la base de datos habia muchos viajes de pocos segundos que tenian el id de estación de inicio igual que el de salida; esto lo hemos interpretado como que existe una avería o algún problema con una bici, por ello descartamos estos viajes). También acortamos superiormente el tiempo de cada viaje para excluir viajes demasiado largos (que podrían ocurrir como otro tipo de avería de bici ó pérdida o robo de ella)
+El intervalo de tiempo que deben cumplir los viajes estudiados es (180, 7200), que al estar medidos en segundos, indican que el viaje sea suficientemente largo como para que no se considere una averia de la bici (según la base de datos habia muchos viajes de pocos segundos que tenian el id de estación de inicio igual que el de salida; esto lo hemos interpretado como que existe una avería o algún problema con una bici, por ello descartamos estos viajes). También acortamos superiormente el tiempo de cada viaje para excluir viajes demasiado largos (que podrían ocurrir como otro tipo de avería de bici ó pérdida o robo de ella)
 
 En principio nuestra idea era introducir unas coordenadas para estudiar su destino preferido, pero al ser complicado introducirlas como argumentos desde la terminal, nos pareció más sensato introducir sólo una zona, ya que además esta agrupa varias coordenadas cercanas.
 
@@ -249,18 +249,24 @@ Estos son algunos de los ejemplos ejecutados con argumentos fijos "202007.json",
 > |    5  | **6** |  7  |  8  |  9  |
 > |    0  |  1    |  2  |  3  |  4  |
 >
-> En total se registran x viajes
-> Para la opcion 0 con probabilidad 10% las zonas preferidas son
->     11 con x probabilidad
+> En total se registran 56276 viajes
+> Para la opcion 0 con probabilidad 30% las zonas preferidas son
+>     6 con 16.88%  de probabilidad
+>     11 con 12.74% de probabilidad
+>     1 con 9.21% de probabilidad
+> Para la opcion 1 
+>   Con probabilidad 30%.
+>        Ninguna zona cumple los requisitos
+>   Con probabildad 15% las zonas preferidas son:
+>       6 con 16.88% probabilidad
+>   Con probabilidad 9% las zonas preferidas son:
+>       6 con 16.88%  de probabilidad
+>       11 con 12.74% de probabilidad
+>       1 con 9.21% de probabilidad
 >
-> Para la opcion 1 con probabilidad 30% las zonas preferidas son:
->     11 con x probabilidad
->     12 con x probabilidad
->     13 con x probabilidad
+> Se observa que la mayoria de viajes vuelven a la misma zona.
+> Este archivo, julio de 2020, fue uno de los primeros meses de pandemia Covid. Es fácil ver,  que hubo un uso de bicis pero que la mayoria no salió de su zona.
 
 
-
-> Este archivo, julio de 2020, fue uno de los primeros meses de pandemia Covid. Es fácil ver, que hubo un uso de bicis ....
-
-
+-cambiar opciones
     
