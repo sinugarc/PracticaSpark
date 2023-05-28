@@ -51,9 +51,7 @@ Vamos a definir una zona en este contexto como una celda de la cuadrícula gener
 > |  $n^2$-n|$n^2$-n+1| ... | $n^2$-1 |
 > | ----| ----|-----|------|
 > | ... | ... | ... |  ... |
-> | ----| ----|-----|------|
 > |  n  | n+1 | ... | 2n-1 |
-> | ----| ----|-----|------|
 > |  0  |  1  | ... |  n-1 |
 
 ### Funciones
