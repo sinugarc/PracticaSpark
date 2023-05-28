@@ -2,8 +2,8 @@
 <sub> Sinhue García Gil,  Cristina Hernando Esperanza,  Daniel Martínez Martín </sub>
 
 FALTA
-- [ ] limpiar el codigo de prints
-
+- [x] limpiar el codigo de prints
+- [ ] cambiar intervalos y ejemplos
 - [x] 1. Definición clara y precisa del problema a resolver.
 - [x] 2. Diseño y la implementación en Spark de la solución al problema propuesto y explicaciones de funciones
 - [ ] 3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
@@ -199,7 +199,7 @@ Primero creamos la cuadrícula de zonas y asignamos a cada estación a una zona 
 
 Para ejecutar el programa necesitamos pasarle como argumentos: infile1, infile2, outfile, el número de filas de la cuadrícula, la zona a estudiar, el porcentaje que consideremos como preferido y la opción para decidir los preferidos. 
 
-Existen dos archivos ejecutables, destino_preferido.py y destino_preferido.ipynb; que se ejecutan desde la terminal y desde Google Colab respectivamente.
+Existen dos archivos ejecutables, *destino_preferido.py* y *destino_preferido.ipynb* ; que se ejecutan desde la terminal y desde Google Colab respectivamente.
 El .py necesita los argumentos como se muestran posteriormente y por otra parte desde el Google Colab hay que subir los archivos .json y cambiar desde el código los argumentos si fuera necesario.
 
 ```ruby
@@ -212,10 +212,13 @@ def main(infile1, infile2, outfile, zonaSetUp, zona, perc, opcion):
 if __name__ == '__main__': #Para el .py
     if len(sys.argv) != 8:
         print("Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
+    elif int(sys.arg[5]) >= int(sys.arg[4])**2 :
+        print("Target Zone doesn't exist. \n Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
     else:
         p=float(sys.argv[6])
         if p>1:
             p=p/100.
+        
         main(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]),p,int(sys.argv[7]))
         
  if __name__ == '__main__': #Para el .ipynb
@@ -225,16 +228,25 @@ if __name__ == '__main__': #Para el .py
 
 ## Explicación de los resultados y conclusión
 
-Aunque el programa está pensado para tratar los archivos de distintos años, nosotros hemos utilizado como ejemplo principal el mes de julio de 2020, que se resume en los archivos de nombre *"202007.json"* y *"202007_movements.json"* descargardos desde la base de datos de BICIMAD: "link".
+Aunque el programa está pensado para tratar los archivos de distintos años, nosotros hemos utilizado como ejemplo principal el mes de julio de 2020, que se resume en los archivos de nombre *"202007.json"* y *"202007_movements.json"* descargardos desde la base de datos de BICIMAD: "[link](https://opendata.emtmadrid.es/Datos-estaticos/Datos-generales-(1))".
+
 Como referencia, hemos usado una cuadrícula de 5x5 (n=5 ó zonaSetUp) y como zona de estudio la 6. 
+
 El intervalo de tiempo que deben cumplir los viajes estudiados es (700, 1000), que al estar medidos en segundos, indican que el viaje sea suficientemente largo como para que no se considere una averia de la bici (según la base de datos habia muchos viajes de pocos segundos que tenian el id de estación de inicio igual que el de salida; esto lo hemos interpretado como que existe una avería o algún problema con una bici, por ello descartamos estos viajes). También acortamos superiormente el tiempo de cada viaje para excluir viajes demasiado largos (que podrían ocurrir como otro tipo de avería de bici ó pérdida o robo de ella)
 
-.py y el .ipynb
+En principio nuestra idea era introducir unas coordenadas para estudiar su destino preferido, pero al ser complicado introducirlas como argumentos desde la terminal, nos pareció más sensato introducir sólo una zona, ya que además esta agrupa varias coordenadas cercanas.
+-Probabilidad como decimal o entero
 
--motivación, ejemplos,  detalles importantes de la implementación
+Estos son algunos de los ejemplos ejecutados con argumentos fijos "202007.json", zonaSetUp=5 y zona_a_analizar=6
+> En total se registran x viajes
+> Para la opcion 0:
+
+> Para la opcion 1 con probabilidad 30% las zonas preferidas son:
+>     
 
 
--Introducir un numero de zona en lugar de coordenadas
+-Motivación
+
 -Ejemplos
 
     
