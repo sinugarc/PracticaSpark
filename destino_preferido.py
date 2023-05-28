@@ -71,35 +71,40 @@ def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     bicis = rdd_base.map(lambda x: json.loads(x))
     movimientos = bicis.map(getTpla2)\
                        .filter(lambda x: x[2] >= 180 and x[2]<=7200 )
-                  
-    id_zona= lista_zonas[zona_a_analizar]  
-    
-    rdd= movimientos.filter(lambda x: x[0] in id_zona)\
-                    .map(lambda x: cambiar_de_id_zona(x,lista_zonas))\
-                    .groupByKey()\
-                    .mapValues(lambda x: len(x))\
-                    .map(lambda x: (x[1],x[0]))\
-                    .sortByKey(False)
-                    
-    total, L=elegir_preferido(rdd.collect(), perc ,opcion)
-
-    outf = open(outfile, "w")
-    outf.write(f'Los movimientos registrados, que salen de la zona {zona_a_analizar}, son {total}. \nEstos provienen de las estaciones {lista_zonas[zona_a_analizar]} \n\n')
-    
-    if opcion==1:
-      outf.write(f'Las zonas preferidas con porcentaje mayor que {perc*100}% son: \n\n')
-      
-    else:
-      outf.write(f'Las zonas que en total suman un porcentaje de viajes mayor que {perc*100}% son: \n')
-      
-    for line in L:
-        p=int(line[1]/total*10000)/100.
-        outf.write(f'- Zona {line[0]} con {line[1]} viajes que acumula el {p}% de los viajes\nLas estaciones pertenecientes a esta zona son {lista_zonas[line[0]]} \n')
+    try:            
+        id_zona= lista_zonas[zona_a_analizar]  
         
-    if len(L)==0:
-        outf.write('Ninguna zona cumple los requisitos solicitados')
+        rdd= movimientos.filter(lambda x: x[0] in id_zona)\
+                        .map(lambda x: cambiar_de_id_zona(x,lista_zonas))\
+                        .groupByKey()\
+                        .mapValues(lambda x: len(x))\
+                        .map(lambda x: (x[1],x[0]))\
+                        .sortByKey(False)
+                        
+        total, L=elegir_preferido(rdd.collect(), perc ,opcion)
     
-    outf.close()
+        outf = open(outfile, "w")
+        outf.write(f'Los movimientos registrados, que salen de la zona {zona_a_analizar}, son {total}. \nEstos provienen de las estaciones {lista_zonas[zona_a_analizar]} \n\n')
+        
+        if opcion==1:
+          outf.write(f'Las zonas preferidas con porcentaje mayor que {perc*100}% son: \n\n')
+          
+        else:
+          outf.write(f'Las zonas que en total suman un porcentaje de viajes mayor que {perc*100}% son: \n')
+          
+        for line in L:
+            p=int(line[1]/total*10000)/100.
+            outf.write(f'- Zona {line[0]} con {line[1]} viajes que acumula el {p}% de los viajes\nLas estaciones pertenecientes a esta zona son {lista_zonas[line[0]]} \n')
+            
+        if len(L)==0:
+            outf.write('Ninguna zona cumple los requisitos solicitados')
+        
+        outf.close()
+    
+    except:
+        print(f'No stations in testing zone {zona_a_analizar}')
+
+
 
 
 def main(infile1,infile2,outfile,zonaSetUp,zona,perc,opcion):
