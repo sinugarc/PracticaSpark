@@ -49,7 +49,6 @@ Además necesitamos para cada estación de origen que pertenezca a la zona dada 
 Vamos a definir una zona en este contexto como una celda de la cuadrícula generada por todas las estaciones y un número dado, n (usualmente 5). Generamos esta cuadrícula tomando la longitud y latitud, máxima y mínima del total de estaciones y las tomamos como referencia para los laterales de la cuadrícula. Se crean intervalos equiespaciados tal que dividan esta cuadrícula en $n$ x $n$,  produciendo $n^2$ celdas ordenadas de la siguiente manera:
 
 > |  $n^2$-n|$n^2$-n+1| ... | $n^2$-1 |
-> | ----| ----|-----|------|
 > |   ... | ... | ... |  ... |
 > |    n  | n+1 | ... | 2n-1 |
 > |    0  |  1  | ... |   n-1 |
