@@ -251,27 +251,30 @@ Estos son algunos de los ejemplos ejecutados con ficheros de entrada los de juli
 >
 > En total se registran 56276 viajes
 
-#### prueba_opcion0.txt
-> 
-> Para la opcion 0 con probabilidad 30% las zonas preferidas son 
+
+
+#### Opción 0 
+> **prueba_opcion0.txt** Con probabilidad 30% las zonas preferidas son 
 > 
 >     6 con 16.88%  de probabilidad
 >     
 >     11 con 12.74% de probabilidad
 >     
 >     1 con 9.21% de probabilidad
->     
-> Para la opcion 1 
+
+
+
+#### Opción 1 
 > 
->   Con probabilidad 30% **prueba_opcion1_1.txt**
+>   **prueba_opcion1_1.txt** Con probabilidad 30% las zonas preferidas son:
 >   
 >        Ninguna zona cumple los requisitos
 >        
->   Con probabildad 15% las zonas preferidas son: **prueba_opcion1_2.txt**
+>    **prueba_opcion1_2.txt** Con probabildad 15% las zonas preferidas son:
 >   
 >       6 con 16.88% de probabilidad
 >       
->   Con probabilidad 9% las zonas preferidas son: **prueba_opcion1_3.txt**
+>    **prueba_opcion1_3.txt** Con probabilidad 9% las zonas preferidas son: 
 >   
 >       6 con 16.88%  de probabilidad
 >       
@@ -280,9 +283,9 @@ Estos son algunos de los ejemplos ejecutados con ficheros de entrada los de juli
 >       1 con 9.21% de probabilidad
 >
 > Se observa que la mayoria de viajes vuelven a la misma zona.
-> 
-> Este archivo, julio de 2020, fue el primer mes tras el fin del estado de alarma nacional de pandemia Covid. Es fácil ver, que hubo un uso de bicis pero que la mayoria no salió de su zona o de sus zonas cercanas. Es decir, podemos concluir que la población de la zona estudiada cumplía, respecto al uso de BICIMAD, las restricciones vigentes. 
-> 
-> Siendo esta una de las aplicaciones para la que se podría usar este programa.
+
+Este archivo, julio de 2020, fue el primer mes tras el fin del estado de alarma nacional de pandemia Covid. Es fácil ver, que hubo un uso de bicis pero que la mayoria no salió de su zona o de sus zonas cercanas. Es decir, podemos concluir que la población de la zona estudiada cumplía, respecto al uso de BICIMAD, las restricciones vigentes. 
+
+Siendo esta una de las aplicaciones para la que se podría usar este programa.
 
     
