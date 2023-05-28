@@ -3,10 +3,10 @@
 
 FALTA
 - [x] limpiar el codigo de prints
-- [ ] cambiar intervalos y ejemplos
+- [x] cambiar intervalos y ejemplos
 - [x] 1. Definición clara y precisa del problema a resolver.
 - [x] 2. Diseño y la implementación en Spark de la solución al problema propuesto y explicaciones de funciones
-- [ ] 3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
+- [x] 3. Explicacion de los resultados y conclusion, motivación, ejemplos,  detalles importantes de la implementación, evaluación de resultados,
 
 
 ## Definición del problema a resolver
@@ -228,25 +228,39 @@ if __name__ == '__main__': #Para el .py
 
 ## Explicación de los resultados y conclusión
 
-Aunque el programa está pensado para tratar los archivos de distintos años, nosotros hemos utilizado como ejemplo principal el mes de julio de 2020, que se resume en los archivos de nombre *"202007.json"* y *"202007_movements.json"* descargardos desde la base de datos de BICIMAD: "[link](https://opendata.emtmadrid.es/Datos-estaticos/Datos-generales-(1))".
+Aunque el programa está pensado para tratar los archivos de distintos años, nosotros hemos utilizado como ejemplo principal el mes de julio de 2020, que se resume en los archivos de nombre *"202007.json"* y *"202007_movements.json"* descargardos desde la base de datos de BICIMAD: "[Enlace de base de datos](https://opendata.emtmadrid.es/Datos-estaticos/Datos-generales-(1))".
 
 Como referencia, hemos usado una cuadrícula de 5x5 (n=5 ó zonaSetUp) y como zona de estudio la 6. 
 
 El intervalo de tiempo que deben cumplir los viajes estudiados es (700, 1000), que al estar medidos en segundos, indican que el viaje sea suficientemente largo como para que no se considere una averia de la bici (según la base de datos habia muchos viajes de pocos segundos que tenian el id de estación de inicio igual que el de salida; esto lo hemos interpretado como que existe una avería o algún problema con una bici, por ello descartamos estos viajes). También acortamos superiormente el tiempo de cada viaje para excluir viajes demasiado largos (que podrían ocurrir como otro tipo de avería de bici ó pérdida o robo de ella)
 
 En principio nuestra idea era introducir unas coordenadas para estudiar su destino preferido, pero al ser complicado introducirlas como argumentos desde la terminal, nos pareció más sensato introducir sólo una zona, ya que además esta agrupa varias coordenadas cercanas.
--Probabilidad como decimal o entero
+
+A su vez, para simplificar la entrada de argumentos por terminal, el porcentaje a estudiar se puede introducir tanto como decimal como entero de 0 a 100.
 
 Estos son algunos de los ejemplos ejecutados con argumentos fijos "202007.json", zonaSetUp=5 y zona_a_analizar=6
+
+> Esta sería la cuadrícula de zonas 
+>
+> |  20   |  21   |  22 |  23 |  24 |
+> | ----  | ----  |-----|-----|-----|
+> |   15  |  16   |  17 |  18 |  19 |
+> |   10  |  11   |  12 |  13 |  14 |
+> |    5  | **6** |  7  |  8  |  9  |
+> |    0  |  1    |  2  |  3  |  4  |
+>
 > En total se registran x viajes
-> Para la opcion 0:
-
+> Para la opcion 0 con probabilidad 10% las zonas preferidas son
+>     11 con x probabilidad
+>
 > Para la opcion 1 con probabilidad 30% las zonas preferidas son:
->     
+>     11 con x probabilidad
+>     12 con x probabilidad
+>     13 con x probabilidad
 
 
--Motivación
 
--Ejemplos
+> Este archivo, julio de 2020, fue uno de los primeros meses de pandemia Covid. Es fácil ver, que hubo un uso de bicis ....
+
 
     
