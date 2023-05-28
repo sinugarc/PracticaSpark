@@ -1,0 +1,6 @@
+Los movimientos registrados, que salen de la zona 6, son 56276. 
+Estos provienen de las estaciones [1, 2, 3, 10, 19, 25, 26, 27, 28, 29, 32, 35, 36, 37, 38, 39, 43, 44, 45, 46, 47, 48, 56, 57, 60, 218, 219] 
+
+Las zonas preferidas con porcentaje mayor que 30.0% son: 
+
+Ninguna zona cumple los requisitos solicitados
