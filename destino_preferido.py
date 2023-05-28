@@ -111,6 +111,8 @@ def main(infile1,infile2,outfile,zonaSetUp,zona,perc,opcion):
 if __name__ == '__main__':
     if len(sys.argv) != 8:
         print("Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
+    elif int(sys.argv[5])>=int(sys.argv[4])**2:
+        print("Target Zone doesn't exist. \n Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
     else:
         p=float(sys.argv[6])
         if p>1:
