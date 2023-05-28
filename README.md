@@ -44,7 +44,7 @@ Consideramos como destino preferido a dichas zonas que cumplan una de las dos si
 
 Para poder clasificar las estaciones en distintas zonas, necesitamos el archivo infile2 *"202007.json"* (o su equivalente de otro año, siempre y cuando mantenga el mismo formato) ya que este contiene para cada estación, identificada con un número del 1 al 220, sus coordenadas geográficas. 
 
-Además necesitamos para cada estación de origen que pertenezca a la zona dada a estudiar, sus estaciones de destino. Esta información viene dada en otro archivo distinto infile1 *"202007_movements.json"* (o su equivalente de otro año) que contiene todos los movimeintos realizados durante el mes. 
+Además necesitamos para cada estación de origen que pertenezca a la zona dada a estudiar, sus estaciones de destino. Esta información viene dada en otro archivo distinto infile1 *"202007_movements.json"* (o su equivalente de otro año) que contiene todos los movimientos realizados durante el mes. 
 
 Vamos a definir una zona en este contexto como una celda de la cuadrícula generada por todas las estaciones y un número dado, n (usualmente 5). Generamos esta cuadrícula tomando la longitud y latitud, máxima y mínima del total de estaciones y las tomamos como referencia para los laterales de la cuadrícula. Se crean intervalos equiespaciados tal que dividan esta cuadrícula en $n$ x $n$,  produciendo $n^2$ celdas ordenadas de la siguiente manera:
 
