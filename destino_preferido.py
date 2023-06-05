@@ -66,7 +66,7 @@ def cambiar_de_id_zona(ida, dict_lista_zonas):
         if ida[1] in dict_lista_zonas[key]:
             return (key,1)
 
-def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
+def mejor_destino_desde(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     rdd_base = sc.textFile(infile1)
     bicis = rdd_base.map(lambda x: json.loads(x))
     movimientos = bicis.map(getTpla2)\
@@ -105,21 +105,25 @@ def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
         print(f'No stations in testing zone {zona_a_analizar}')
 
 
-
-
 def main(infile1,infile2,outfile,zonaSetUp,zona,perc,opcion):
     sc=SparkContext()
     sc.setLogLevel("ERROR")
     b= agruparZona(sc,infile2,zonaSetUp)
-    F(sc,zona, b, infile1,outfile,perc, opcion)
+    mejor_destino_desde(sc,zona, b, infile1,outfile,perc, opcion)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 8:
-        print("Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
-    elif int(sys.argv[5])>=int(sys.argv[4])**2:
+    if len(sys.argv) < 8:
+        print("Uso: python3 {0} <#zoneSetUp> <targetZone> < % > < Option > <fileOut> <fileInStations> <fileInMovements1> <fileInMovements2> <fileInMovements3> ...".format(sys.argv[0]))
+    elif int(sys.argv[2])>=int(sys.argv[1])**2:
         print("Target Zone doesn't exist. \n Uso: python3 {0} <fileInMovements> <fileInStations> <fileOut> <#zoneSetUp> <targetZone> < % > < Option >".format(sys.argv[0]))
     else:
-        p=float(sys.argv[6])
+        p=float(sys.argv[3])
         if p>1:
             p=p/100.
-        main(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]),p,int(sys.argv[7]))
+        files=sys.argv[7]
+        i=8
+        while i<len(sys.argv):
+            files += ","
+            files += sys.argv[i]
+            i += 1
+        main(files,sys.argv[6],sys.argv[5],int(sys.argv[1]),int(sys.argv[2]),p,int(sys.argv[4]))
