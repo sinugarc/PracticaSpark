@@ -1,0 +1,6 @@
+Los movimientos registrados, que salen de la zona 6, son 98001. 
+Estos provienen de las estaciones [1, 2, 3, 10, 19, 25, 26, 27, 28, 29, 32, 35, 36, 37, 38, 39, 43, 44, 45, 46, 47, 48, 56, 57, 60, 218, 219] 
+
+Las zonas que en total suman un porcentaje de viajes mayor que 15.0% son: 
+- Zona 6 con 17005 viajes que acumula el 17.35% de los viajes
+Las estaciones pertenecientes a esta zona son [1, 2, 3, 10, 19, 25, 26, 27, 28, 29, 32, 35, 36, 37, 38, 39, 43, 44, 45, 46, 47, 48, 56, 57, 60, 218, 219] 
