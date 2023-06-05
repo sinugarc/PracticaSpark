@@ -162,7 +162,7 @@ Por último escribimos en un fichero de salida los resultados obtenidos.
 Si no existiera ninguna estación en la zona a estudiar devolverá, en vez de un fichero, un mensaje por pantalla detallando el problema.
 
 ```ruby
-def F(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
+def mejor_destino_desde(sc, zona_a_analizar, lista_zonas, infile1, outfile, perc, opcion):
     rdd_base = sc.textFile(infile1)
     bicis = rdd_base.map(lambda x: json.loads(x))
     movimientos = bicis.map(getTpla2)\
@@ -205,7 +205,7 @@ def main(infile1, infile2, outfile, zonaSetUp, zona, perc, opcion):
     sc=SparkContext()
     sc.setLogLevel("ERROR")
     b= agruparZona(sc,infile2,zonaSetUp)
-    F(sc,zona, b, infile1,outfile,perc, opcion)
+    mejor_destino_desde(sc,zona, b, infile1,outfile,perc, opcion)
 
 if __name__ == '__main__': #Para el .py
     if len(sys.argv) != 8:
@@ -216,6 +216,12 @@ if __name__ == '__main__': #Para el .py
         p=float(sys.argv[6])
         if p>1:
             p=p/100.
+        i=8
+        files=sys.argv[7]
+        while i<len(sys.argv):
+          files += ','
+          files += sys.argv[i]
+          i+=1
         main(sys.argv[1],sys.argv[2],sys.argv[3],int(sys.argv[4]),int(sys.argv[5]),p,int(sys.argv[7]))
         
  if __name__ == '__main__': #Para el .ipynb
